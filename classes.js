@@ -30,7 +30,21 @@
 */
 
 //Code Here
+class Employee {
+  constructor(first_name, last_name, email, age){
+    this.first_name = first_name;
+    this.last_name = last_name;
+    this.email = email;
+    this.age = age
+  }
+  makeWidget(){
+    return this.first_name + " " + this.last_name + " " + "Widget"
+  }
+}
 
+let elon = new Employee("Elon", "Musk", "elon@tesla.com", 99)
+console.log(elon)
+elon.makeWidget()
 
 ////////// PROBLEM 2 //////////
 
@@ -48,7 +62,23 @@
 */
 
 //Code Here
-
+class Manager extends Employee {
+  constructor(first_name, last_name, email, age){
+    super(first_name, last_name, email, age);
+    this.reports = [];
+  }
+  hire(employee){
+    this.reports.push(employee)
+  }
+  fire(employee){
+    let i = this.reports.indexOf(employee);
+    this.reports.splice(i-1,1)
+  }
+}
+let michael = new Manager("Michael", "Scott", "bigmike@dm.com", 40)
+console.log(michael)
+michael.hire();
+michael.fire();
 
 ////////// PROBLEM 3 //////////
 
@@ -72,6 +102,36 @@
 */
 
 //Code Here
+class ProgressiveManager extends Manager {
+  constructor(first_name, last_name, email, age, reports=[]){
+    super(first_name, last_name, email, age, reports)
+    this.title = 'Not a manager'
+    this.bonus = 0
+
+  }
+  hire(employee){
+    this.reports.push(employee)
+    let employees = this.reports.length;
+    
+    if(employees > 0 && employees<=3){
+      this.title = "Barely Manager"
+    } else if (employees >=4 && employees<= 10){
+      this.title = 'Mostly Manager'
+    } else if (employees >=11 && employees<= 50){
+      this.title = 'Manager'
+    } else if (employees >=51 && employees<= 100){
+      this.title = 'Manager Plus'
+    } else if (employees > 100){
+      this.title = 'Bestest Manager'
+    }
+  }
+  fire(employee){
+    let i = this.reports.indexOf(employee);
+    this.reports.splice(i-1,1);
+    this.bonus += 100;
+  }
+  
+}
 
 
 
@@ -100,4 +160,25 @@
 
 //Code Here
 
-
+class Machine {
+  constructor(){
+    this.widgets_made_count = 0;
+    this.wear_and_tear_count = 0;
+    this.needs_reboot = false
+  }
+  makeWidgets(num){
+    this.widgets_made_count += num;
+    if(num >= 50){
+      this.wear_and_tear_count++
+    }
+  }
+  fixMachine(){
+    this.needs_reboot = true
+  }
+  reboot(){
+    return function(){
+      this.wear_and_tear_count -= 10;
+      this.needs_reboot = false
+    }
+  }
+}
